@@ -90,6 +90,8 @@ resource "aws_cognito_user_pool" "mochi-userpool" {
     
   }
 
+  
+
   schema {
     attribute_data_type      = "String"
     name                     = "email"
@@ -111,6 +113,18 @@ resource "aws_cognito_user_pool" "mochi-userpool" {
     string_attribute_constraints {
         max_length = "2048" 
         min_length = "0"
+    }
+    
+  }
+
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "old_sub"
+    string_attribute_constraints {
+      max_length = "2048"
+      min_length = "0"
     }
     
   }
