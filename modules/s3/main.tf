@@ -35,6 +35,9 @@ resource "aws_s3_bucket_policy" "mochi_assets_policy" {
       },
     ]
   })
+  lifecycle {
+     ignore_changes = [policy]
+  }
 }
 
 resource "aws_ssm_parameter" "mochi_assets_bucket" {
@@ -42,4 +45,24 @@ resource "aws_ssm_parameter" "mochi_assets_bucket" {
   description = "mochi_assets_bucket "
   type        = "String"
   value       = aws_s3_bucket.mochi_assets.bucket
+}
+
+
+resource "aws_s3_bucket" "mochi_telemetry_bucket" {
+  bucket = "mochi-${var.infra_env}-telemetry-bucket"
+
+  versioning {
+    enabled = true
+  }
+  lifecycle {
+    prevent_destroy = true
+  }
+  
+}
+
+resource "aws_ssm_parameter" "mochi_telemetry_bucket" {
+  name        = "mochi_telemetry_bucket"
+  description = "mochi_telemetry_bucket "
+  type        = "String"
+  value       = aws_s3_bucket.mochi_telemetry_bucket.bucket
 }
