@@ -26,8 +26,11 @@ dev,staging and prod are separate environments which share nothing and they live
 
  #### Below resources are created manually
 
- 1. Cloudfront for mochi appi to read posts and games from s3 bucket
- 2. SNS configured for each ios build manually . It needs to upload ios distribution certificate while creating platform application .
- 3. Some of the ssm key value provided by ios team .e.g. private key of application setup manually.
+ 
+ 1. Some of the ssm key value provided by ios team .e.g. private key of application setup manually.
     1. auth_private_key 
     2. auth_info
+    3. sns_platform_app_certificate : contains certificate value from apple distribution certificate file().p12) file
+    4. sns_platform_app_private_key : contain private key of dist certificate file
+
+          
