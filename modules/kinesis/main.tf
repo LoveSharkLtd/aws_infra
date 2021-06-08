@@ -95,4 +95,11 @@ tags = {
   }
 }
 
+resource "aws_ssm_parameter" "mochi_kinesis_stream_name" {
+  name        = "mochi_kinesis_stream_name"
+  description = "mochi_kinesis_stream_name for mochi  "
+  type        = "String"
+  value       = aws_kinesis_stream.mochi_stream.name
+}
+
 
