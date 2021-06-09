@@ -19,9 +19,9 @@ module "kinesis" {
 data "terraform_remote_state" "s3" {
   backend = "s3"
   config = {
-    bucket  = "terraform-mochi-state"
-    key     = "${var.infra_env}/s3/terraform.tfstate"
-    profile = "circleci_sandbox"
-    region  = "eu-west-1"
+    bucket = "terraform-mochi-state"
+    key    = "${var.infra_env}/s3/terraform.tfstate"
+    region = "eu-west-1"
+
   }
 }

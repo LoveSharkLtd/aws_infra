@@ -23,10 +23,9 @@ module "database" {
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
-    bucket  = "terraform-mochi-state"
-    key     = "${var.infra_env}/network/terraform.tfstate"
-    profile = "circleci_sandbox"
-    region  = "eu-west-1"
+    bucket = "terraform-mochi-state"
+    key    = "${var.infra_env}/network/terraform.tfstate"
+    region = "eu-west-1"
   }
 }
 
