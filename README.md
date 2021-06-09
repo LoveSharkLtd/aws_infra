@@ -9,23 +9,23 @@ dev,staging and prod are separate environments which share nothing and they live
      ```
      export AWS_PROFILE=circleci_sandbox
      ```
-1. Initialize terraform for given provider
+1. Initialize terraform for given provider .
      ```
      terraform init
       ```
 3. Navigate to environment  e.g dev :
       ``` 
       cd dev/network
-      terraform init 
+      terragrunt init 
       ```
-3. Plan resources.
+3. Plan resources using terragrunt.
     ```
-    terraform plan -var-file ../variables.tfvars
+    terragrunt plan -var-file ../variables.tfvars
      ```
 
 4. Make sure to review all resource before applying below command.
      ``` 
-     terraform apply -var-file ../variables.tfvars
+     terragrunt apply -var-file ../variables.tfvars
       ```
 
 
