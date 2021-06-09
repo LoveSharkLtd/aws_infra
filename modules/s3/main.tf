@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "mochi_assets" {
   }
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET","PUT", "POST"]
+    allowed_methods = ["GET", "PUT", "POST"]
     allowed_origins = ["*"]
     expose_headers  = []
     max_age_seconds = 3000
@@ -30,13 +30,13 @@ resource "aws_s3_bucket_policy" "mochi_assets_policy" {
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:Get*"
-        Resource = "${aws_s3_bucket.mochi_assets.arn}/*"
-        
+        Resource  = "${aws_s3_bucket.mochi_assets.arn}/*"
+
       },
     ]
   })
   lifecycle {
-     ignore_changes = [policy]
+    ignore_changes = [policy]
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_s3_bucket" "mochi_telemetry_bucket" {
   lifecycle {
     prevent_destroy = true
   }
-  
+
 }
 
 resource "aws_ssm_parameter" "mochi_telemetry_bucket" {

@@ -3,16 +3,16 @@
 ######
 
 resource "aws_security_group" "my_sql_db" {
-    name = "mochi-${var.infra_env}-my_sql_db_sg"
-    description = "security group for mysql"
-    vpc_id = module.vpc.vpc_id
+  name        = "mochi-${var.infra_env}-my_sql_db_sg"
+  description = "security group for mysql"
+  vpc_id      = module.vpc.vpc_id
 
-    tags = {
-        Name = "mochi-${var.infra_env}-my_sql_db_sg"
-        Environment = var.infra_env
-        ManagedBy = "terraform"
-    }
-  
+  tags = {
+    Name        = "mochi-${var.infra_env}-my_sql_db_sg"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
+  }
+
 }
 
 resource "aws_security_group_rule" "my_sql_inbound" {
@@ -37,30 +37,30 @@ resource "aws_security_group_rule" "my_sql_outbound" {
 
 
 resource "aws_security_group" "public" {
-    name = "mochi-${var.infra_env}-public"
-    description = "security group for public "
-    vpc_id = module.vpc.vpc_id
+  name        = "mochi-${var.infra_env}-public"
+  description = "security group for public "
+  vpc_id      = module.vpc.vpc_id
 
-    ingress {
-      cidr_blocks = [module.vpc.vpc_cidr_block]
-      description = "all traffic "
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-    } 
-    egress {
-      cidr_blocks = [ "0.0.0.0/0" ]
-      ipv6_cidr_blocks = ["::/0"]
-      from_port = 0
-      protocol = "-1"
-      to_port = 0
-    } 
-    tags = {
-        Name = "mochi-${var.infra_env}-public"
-        Environment = var.infra_env
-        ManagedBy = "terraform"
-    }
-  
+  ingress {
+    cidr_blocks = [module.vpc.vpc_cidr_block]
+    description = "all traffic "
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+  }
+  egress {
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+    from_port        = 0
+    protocol         = "-1"
+    to_port          = 0
+  }
+  tags = {
+    Name        = "mochi-${var.infra_env}-public"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
+  }
+
 }
 
 

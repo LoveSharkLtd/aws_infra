@@ -1,6 +1,6 @@
 provider "aws" {
-  region  = "eu-west-1"
-  
+  region = "eu-west-1"
+
 }
 
 terraform {
@@ -9,5 +9,5 @@ terraform {
 
 module "cloudfront" {
   source = "../../modules/cloudfront"
-  
+
 }

@@ -1,11 +1,11 @@
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "2.77.0"
 
   name = "mochi-${var.infra_env}-vpc"
 
   cidr = var.vpc_cidr
-  azs =var.azs
+  azs  = var.azs
 
   public_subnets = var.public_subnets
 
@@ -26,15 +26,15 @@ module "vpc" {
 # }
 
 module "vpc-endpoints" {
-  source = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  vpc_id = module.vpc.vpc_id
+  source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
+  vpc_id             = module.vpc.vpc_id
   security_group_ids = [aws_security_group.public.id]
-  endpoints ={
+  endpoints = {
     ssm = {
-      service = "ssm"
-      security_group_ids  = [aws_security_group.public.id]
-      subnet_ids          = module.vpc.public_subnets
-      tags                = { Name = "ssm-vpc-endpoint" }
+      service            = "ssm"
+      security_group_ids = [aws_security_group.public.id]
+      subnet_ids         = module.vpc.public_subnets
+      tags               = { Name = "ssm-vpc-endpoint" }
 
     },
     s3 = {
@@ -46,23 +46,23 @@ module "vpc-endpoints" {
       subnet_ids          = module.vpc.public_subnets
       private_dns_enabled = true
       tags                = { Name = "logs-vpc-endpoint" }
-      
+
     },
     ecr_api = {
       service             = "ecr.api"
       subnet_ids          = module.vpc.public_subnets
       private_dns_enabled = true
       tags                = { Name = "ecr_api-vpc-endpoint" }
-      
+
     },
     ecr_dkr = {
       service             = "ecr.dkr"
       private_dns_enabled = true
       subnet_ids          = module.vpc.public_subnets
       tags                = { Name = "ecr_dkr-vpc-endpoint" }
-      
+
     },
-    
+
 
   }
   tags = {
@@ -75,5 +75,5 @@ resource "aws_ssm_parameter" "subnet_ids" {
   name        = "subnet_ids"
   description = "subnet_ids of vpc"
   type        = "StringList"
-  value       =  join(",", module.vpc.public_subnets)
+  value       = join(",", module.vpc.public_subnets)
 }

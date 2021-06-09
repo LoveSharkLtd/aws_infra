@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 terraform {
-   backend "s3" {}
+  backend "s3" {}
   # backend "s3" {
   #   bucket = "terraform-mochi-state"
   #   key = "dev/terraform.tfstate"
