@@ -4,6 +4,11 @@ Features
 
 dev,staging and prod are separate environments which share nothing and they live in separate AWS accounts
 
+0. Create aws profile name as environment variable
+     Make sure profile has limited permission to build infrastructure.
+     ```
+     export AWS_PROFILE=circleci_sandbox
+     ```
 1. Initialize terraform for given provider
      ```
      terraform init

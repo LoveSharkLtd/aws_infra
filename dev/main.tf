@@ -4,15 +4,7 @@ provider "aws" {
 }
 
 terraform {
-  backend "s3" {
-    bucket         = "terraform-mochi-state"
-    key            = "dev/terraform.tfstate"
-    profile        = "circleci_sandbox"
-    region         = "eu-west-1"
-    dynamodb_table = "terraform-state-locking"
-    encrypt        = true
-
-  }
+   backend "s3" {}
   # backend "s3" {
   #   bucket = "terraform-mochi-state"
   #   key = "dev/terraform.tfstate"
