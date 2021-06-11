@@ -38,8 +38,15 @@ module "vpc-endpoints" {
 
     },
     s3 = {
-      service = "s3"
-      tags    = { Name = "s3-vpc-endpoint" }
+      service    = "s3"
+      subnet_ids = module.vpc.public_subnets
+      tags       = { Name = "s3-vpc-endpoint" }
+    },
+    s3_gateway = {
+      service         = "s3"
+      service_type    = "Gateway"
+      route_table_ids = flatten([module.vpc.intra_route_table_ids, module.vpc.public_route_table_ids])
+      tags            = { Name = "s3-vpc-gateway-endpoint" }
     },
     logs = {
       service             = "logs"
