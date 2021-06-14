@@ -11,8 +11,8 @@ resource "aws_rds_cluster" "my_sql_cluster" {
 
   database_name             = "loveshark"
   final_snapshot_identifier = "final-snapshot-mochi-${var.infra_env}"
-  master_username           = var.mysql_master_username
-  master_password           = var.mysql_master_password
+  master_username           = local.db_creds.mysql_master_username
+  master_password           = local.db_creds.mysql_master_password
   vpc_security_group_ids    = var.vpc_security_group_ids
   backup_retention_period   = 5
   preferred_backup_window   = "07:00-09:00"
@@ -63,6 +63,17 @@ resource "aws_db_subnet_group" "db_subnet_group" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+data "aws_kms_secrets" "creds" {
+  secret {
+    name    = "db"
+    payload = file("../db.yml.encrypted")
+  }
+}
+
+locals {
+  db_creds = yamldecode(data.aws_kms_secrets.creds.plaintext["db"])
 }
 
 resource "aws_ssm_parameter" "db_host" {

@@ -66,5 +66,15 @@ Each environment lives in seperate aws account.Make sure to export AWS_ACCESS_KE
     2. auth_info
     3. sns_platform_app_certificate : contains certificate value from apple distribution certificate file().p12) file
     4. sns_platform_app_private_key : contain private key of dist certificate file
+ 2. Confidential data encrypted using aws KMS key and only administrator can encrypt the file using aws kms and key-id of alias "mochi_secrets" command below.
+    
+    ``` 
+    aws kms encrypt --key-id <<key_id>> --region eu-west-1 --plaintext fileb://<<file.yml>  —output text --query CiphertextBlob ><<file.yml>.encrypted 
+    ``` 
+   Output file of above command <file.yml>.encrypted checked into each environments repository . e.g. dev/db.yml.encrypted
 
-          
+   You can use below command to decrypt it.Copy the content of .encryped filed and put at <<encrypted_text>>
+
+   ``` 
+    aws kms decrypt --ciphertext-blob fileb://<(echo "<<encrypted_text>>" | base64 -D) --output text --query Plaintext --region <<region> | base64 -D > <<file_descrypted.yml>>
+   ```
