@@ -2,9 +2,9 @@
 Mochi Infrastructure (IaC)
 =========
 
-This directory contains terraform script to create,plan and manage infrastructure automatically required for building Moch App.
+This directory contains terraform scripts to create, plan and manage infrastructure required by the Mochi app.
 
-If you are interested to learn terraform,please check out our [Getting Started guides](https://learn.hashicorp.com/terraform#getting-started) on HashiCorp's learning platform. There are also [additional guides](https://learn.hashicorp.com/terraform#operations-and-development) to continue your learning.
+If you are interested in learning more about terraform, please check out the [Getting Started guides](https://learn.hashicorp.com/terraform#getting-started) on HashiCorp's learning platform.
 
 
 Remote state resource creation
