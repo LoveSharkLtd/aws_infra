@@ -1,25 +1,16 @@
 provider "aws" {
-  region  = "eu-west-1"
-  profile = var.aws_profile
+  region = "eu-west-1"
 }
 
 terraform {
-  backend "s3" {
-    bucket         = "terraform-mochi-state"
-    key            = "dev/cognito/terraform.tfstate"
-    profile        = "circleci_sandbox"
-    region         = "eu-west-1"
-    dynamodb_table = "terraform-state-locking"
-    encrypt        = true
+  backend "s3" {}
 
-  }
 }
 
 module "cognito" {
-  source = "../../modules/cognito"
+  source    = "../../modules/cognito"
+  infra_env = var.infra_env
 
-  infra_env      = var.infra_env
-  
 }
 
 

@@ -1,35 +1,35 @@
 variable "infra_env" {
-    type = string
-    description = "infrastructure environment"
-  
+  type        = string
+  description = "infrastructure environment"
+
 }
 
 variable "redis_node_type" {
-    type = string
-    description = "redis_node_type environment"
-  
+  type        = string
+  description = "redis_node_type environment"
+
 }
 
 
 variable "redis_nodes" {
-    type = number
-    description = "number of nodes"
-  
+  type        = number
+  description = "number of nodes"
+
 }
 
 variable "vpc_security_group_ids" {
-  type = list(string)
+  type        = list(string)
   description = "vpc_security_group_ids environment"
-  
+
 }
 variable "azs" {
-    type = list(string)
-    description = "Azs "
-  
+  type        = list(string)
+  description = "Azs "
+
 }
 
 
 variable "public_subnets" {
-    type = list(string)
-    description = "subnet "
+  type        = list(string)
+  description = "subnet "
 }

@@ -9,3 +9,9 @@ variable "kinesis_shard_count" {
   description = "kinesis_shard_count environment"
 
 }
+
+variable "infra_env" {
+  type        = string
+  description = "infrastructure environment"
+
+}

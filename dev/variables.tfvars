@@ -1,0 +1,8 @@
+aws_profile = "circleci_sandbox"
+infra_env = "dev"
+mysql_instance_class="db.t2.small"
+stream_name="loveshark-dev"
+kinesis_shard_count="1"
+redis_node_type="cache.t2.small"
+redis_nodes="2"
+sns_platform_application="mochi-prototype-application"

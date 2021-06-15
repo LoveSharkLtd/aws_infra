@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "sns_cognito_role" {
-  name= "mochi-${var.infra_env}-cognito-sns"
+  name = "mochi-${var.infra_env}-cognito-sns"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -11,45 +11,45 @@ resource "aws_iam_role" "sns_cognito_role" {
         Principal = {
           Service = "cognito-idp.amazonaws.com"
         },
-        "Condition": {
-        "StringEquals": {
-          "sts:ExternalId": "sns_cognito_role_external_id"
+        "Condition" : {
+          "StringEquals" : {
+            "sts:ExternalId" : "sns_cognito_role_external_id"
+          }
         }
-      }
       },
     ]
   })
-  inline_policy{
+  inline_policy {
     name = "sns_inline_policy"
     policy = jsonencode({
-      "Version": "2012-10-17",
-      "Statement": [
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "sns:publish"
-              ],
-              "Resource": [
-                  "*"
-              ]
-          }
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "sns:publish"
+          ],
+          "Resource" : [
+            "*"
+          ]
+        }
       ]
     })
   }
   tags = {
-      ManagedBy = "teraform"
-      environment = var.infra_env
+    ManagedBy   = "teraform"
+    environment = var.infra_env
 
   }
 }
 
 
 resource "aws_cognito_user_pool" "mochi-userpool" {
-  name = "mochi-${var.infra_env}"
-  username_attributes = ["email","phone_number"]
-  mfa_configuration = "OPTIONAL"
+  name                     = "mochi-${var.infra_env}"
+  username_attributes      = ["email", "phone_number"]
+  mfa_configuration        = "OPTIONAL"
   auto_verified_attributes = ["phone_number"]
-  sms_verification_message ="Your MOCHI verification code is {####}"
+  sms_verification_message = "Your MOCHI verification code is {####}"
   sms_configuration {
     external_id    = "sns_cognito_role_external_id"
     sns_caller_arn = aws_iam_role.sns_cognito_role.arn
@@ -66,14 +66,14 @@ resource "aws_cognito_user_pool" "mochi-userpool" {
     }
   }
   username_configuration {
-    case_sensitive  = true
+    case_sensitive = true
   }
   password_policy {
-    minimum_length    = 8
-    require_symbols   = false
-    require_numbers   = true
-    require_lowercase = true
-    require_uppercase = true
+    minimum_length                   = 8
+    require_symbols                  = false
+    require_numbers                  = true
+    require_lowercase                = true
+    require_uppercase                = true
     temporary_password_validity_days = 7
   }
 
@@ -87,34 +87,34 @@ resource "aws_cognito_user_pool" "mochi-userpool" {
       max_length = "2048"
       min_length = "0"
     }
-    
+
   }
 
-  
+
 
   schema {
     attribute_data_type      = "String"
     name                     = "email"
-    required = false
+    required                 = false
     developer_only_attribute = false
     string_attribute_constraints {
-        max_length = "2048" 
-        min_length = "0"
+      max_length = "2048"
+      min_length = "0"
     }
-    
+
   }
 
   schema {
     attribute_data_type      = "String"
     name                     = "phone_number"
-    required = false
+    required                 = false
     developer_only_attribute = false
-    mutable = false
+    mutable                  = false
     string_attribute_constraints {
-        max_length = "2048" 
-        min_length = "0"
+      max_length = "2048"
+      min_length = "0"
     }
-    
+
   }
 
   schema {
@@ -126,25 +126,25 @@ resource "aws_cognito_user_pool" "mochi-userpool" {
       max_length = "2048"
       min_length = "0"
     }
-    
+
   }
 
   device_configuration {
-    device_only_remembered_on_user_prompt =false
+    device_only_remembered_on_user_prompt = false
   }
 
- lifecycle {
-        prevent_destroy = true
- }
-  
+  lifecycle {
+    prevent_destroy = true
+  }
+
 }
 
 resource "aws_cognito_user_pool_client" "mochi_ios_client" {
-  name         = "mochi-${var.infra_env}-ios_client"
-  user_pool_id = aws_cognito_user_pool.mochi-userpool.id
-  explicit_auth_flows = ["ALLOW_ADMIN_USER_PASSWORD_AUTH","ALLOW_CUSTOM_AUTH","ALLOW_USER_PASSWORD_AUTH","ALLOW_USER_SRP_AUTH","ALLOW_REFRESH_TOKEN_AUTH"]
-  prevent_user_existence_errors  = "ENABLED"
-  generate_secret     = true
+  name                          = "mochi-${var.infra_env}-ios_client"
+  user_pool_id                  = aws_cognito_user_pool.mochi-userpool.id
+  explicit_auth_flows           = ["ALLOW_ADMIN_USER_PASSWORD_AUTH", "ALLOW_CUSTOM_AUTH", "ALLOW_USER_PASSWORD_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+  prevent_user_existence_errors = "ENABLED"
+  generate_secret               = true
 }
 
 
