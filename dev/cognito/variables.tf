@@ -1,6 +1,6 @@
-variable "aws_profile" {
+variable "sms_monthly_limit" {
   type        = string
-  description = "aws_profile environment"
+  description = "sms_monthly_limit"
 
 }
 variable "infra_env" {
