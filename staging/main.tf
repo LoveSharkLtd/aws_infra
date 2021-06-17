@@ -4,7 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket         = "terraform-mochi-state"
+    bucket         = "terraform-staging-mochi-state"
     key            = "staging/terraform.tfstate"
     region         = "eu-west-1"
     dynamodb_table = "terraform-state-locking"
@@ -15,7 +15,7 @@ terraform {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "terraform-mochi-state"
+  bucket = "terraform-staging-mochi-state"
 
   versioning {
     enabled = true
