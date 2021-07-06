@@ -81,14 +81,14 @@ resource "aws_iam_role" "sns_sms_successfeedback_role" {
     })
   }
   tags = {
-    ManagedBy   = "teraform"
+    ManagedBy   = "terraform"
     environment = var.infra_env
 
   }
 }
 
 resource "aws_sns_sms_preferences" "update_sms_prefs" {
-  monthly_spend_limit                   = var.sms_monthly_limit
+  monthly_spend_limit                   = var.sms_monthly_dollar_limit
   delivery_status_iam_role_arn          = aws_iam_role.sns_sms_successfeedback_role.arn
   default_sms_type                      = "Transactional"
   default_sender_id                     = "MOCHI"

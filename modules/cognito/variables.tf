@@ -4,8 +4,8 @@ variable "infra_env" {
 
 }
 
-variable "sms_monthly_limit" {
+variable "sms_monthly_dollar_limit" {
   type        = string
-  description = "sms_monthly_limit"
+  description = "sms_monthly_dollar_limit"
 
 }
