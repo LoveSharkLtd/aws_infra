@@ -44,6 +44,58 @@ resource "aws_iam_role" "sns_cognito_role" {
 }
 
 
+resource "aws_iam_role" "sns_sms_successfeedback_role" {
+  name = "mochi-${var.infra_env}-sns-sms-successfeedback"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Sid    = "",
+        Principal = {
+          Service = "sns.amazonaws.com"
+        }
+      },
+    ]
+  })
+  inline_policy {
+    name = "sns_success_feedback_policy"
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "logs:PutMetricFilter",
+            "logs:PutRetentionPolicy"
+          ],
+          "Resource" : [
+            "*"
+          ]
+        }
+      ]
+    })
+  }
+  tags = {
+    ManagedBy   = "terraform"
+    environment = var.infra_env
+
+  }
+}
+
+resource "aws_sns_sms_preferences" "update_sms_prefs" {
+  monthly_spend_limit                   = var.sms_monthly_dollar_limit
+  delivery_status_iam_role_arn          = aws_iam_role.sns_sms_successfeedback_role.arn
+  default_sms_type                      = "Transactional"
+  default_sender_id                     = "MOCHI"
+  delivery_status_success_sampling_rate = 0
+
+}
+
 resource "aws_cognito_user_pool" "mochi-userpool" {
   name                     = "mochi-${var.infra_env}"
   username_attributes      = ["email", "phone_number"]
