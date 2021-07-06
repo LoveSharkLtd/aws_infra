@@ -281,3 +281,29 @@ resource "aws_cognito_user_pool" "cms-userpool" {
   }
 
 }
+
+
+resource "aws_cognito_user_pool_client" "cms_web_client" {
+  name                          = "cms-${var.infra_env}-web_client"
+  user_pool_id                  = aws_cognito_user_pool.cms-userpool.id
+  explicit_auth_flows           = ["ALLOW_ADMIN_USER_PASSWORD_AUTH", "ALLOW_CUSTOM_AUTH", "ALLOW_USER_PASSWORD_AUTH", "ALLOW_USER_SRP_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+  prevent_user_existence_errors = "ENABLED"
+  supported_identity_providers  = ["COGNITO"]
+  
+}
+
+
+
+resource "aws_ssm_parameter" "cms_cognito_pool_id" {
+  name        = "cms_cognito_pool_id"
+  description = "cms cognito_pool_id"
+  type        = "String"
+  value       = aws_cognito_user_pool.cms-userpool.id
+}
+
+resource "aws_ssm_parameter" "cms_cognito_app_client_id" {
+  name        = "cms_cognito_app_client_id"
+  description = "cms cognito_app_client_id "
+  type        = "String"
+  value       = aws_cognito_user_pool_client.cms_web_client.id
+}
