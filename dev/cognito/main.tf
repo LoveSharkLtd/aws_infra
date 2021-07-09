@@ -10,7 +10,7 @@ terraform {
 module "cognito" {
   source    = "../../modules/cognito"
   infra_env = var.infra_env
-  sms_monthly_limit = var.sms_monthly_limit
+  sms_monthly_dollar_limit = var.sms_monthly_dollar_limit
 }
 
 
