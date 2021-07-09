@@ -33,6 +33,11 @@ resource "aws_kinesis_firehose_delivery_stream" "mochi_firehose_delivery_stream"
     buffer_interval = 300
     buffer_size     = 5
     role_arn        = aws_iam_role.firehose_role.arn
+    cloudwatch_logging_options{
+      enabled = true
+      log_group_name = "/aws/kinesisfirehose/${var.stream_name}-kinesis-firehose"
+      log_stream_name = "S3Delivery"
+    }
 
   }
 
@@ -74,7 +79,23 @@ resource "aws_iam_role" "firehose_role" {
       "Version" : "2012-10-17",
       "Statement" : [
         {
-          "Sid" : "",
+          "Sid" : "S3Access",
+          "Effect" : "Allow",
+          "Action" : [
+            "s3:AbortMultipartUpload",
+            "s3:GetBucketLocation",
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:ListBucketMultipartUploads",
+            "s3:PutObject"
+          ],
+          "Resource" : [
+            var.telemetry_bucket_arn,
+            "${var.telemetry_bucket_arn}/*"
+          ]
+        },
+        {
+          "Sid" : "kinesisAccess",
           "Effect" : "Allow",
           "Action" : [
             "kinesis:DescribeStream",
@@ -82,7 +103,57 @@ resource "aws_iam_role" "firehose_role" {
             "kinesis:GetRecords",
             "kinesis:ListShards"
           ],
-          "Resource" : "arn:aws:kinesis:*:*:stream/${var.stream_name}"
+          "Resource" : aws_kinesis_stream.mochi_stream.arn
+        },
+        {
+            "Sid": "cloudwatchAccess",
+            "Effect": "Allow",
+            "Action": [
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:log-group:/aws/kinesisfirehose/${var.stream_name}-kinesis-firehose:log-stream:*"
+            ]
+        },
+        {
+          "Sid" : "kmsKinesisAccess",
+          "Effect" : "Allow",
+          "Action": [
+                "kms:Decrypt",
+                "kms:GenerateDataKey"
+            ],
+            "Resource": [
+                "arn:aws:kms:eu-west-1:${data.aws_caller_identity.current.account_id}:key/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "kms:ViaService": "kinesis.eu-west-1.amazonaws.com"
+                },
+                "StringLike": {
+                    "kms:EncryptionContext:aws:kinesis:arn": aws_kinesis_stream.mochi_stream.arn
+                }
+            }
+        },
+        {
+            "Sid": "KmsS3Access",
+            "Effect": "Allow",
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Resource": [
+                "arn:aws:kms:eu-west-1:${data.aws_caller_identity.current.account_id}:key/%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "kms:ViaService": "s3.eu-west-1.amazonaws.com"
+                },
+                "StringLike": {
+                    "kms:EncryptionContext:aws:s3:arn": [
+                        "arn:aws:s3:::%FIREHOSE_POLICY_TEMPLATE_PLACEHOLDER%/*"
+                    ]
+                }
+            }
         }
       ]
 
@@ -101,5 +172,7 @@ resource "aws_ssm_parameter" "mochi_kinesis_stream_name" {
   type        = "String"
   value       = aws_kinesis_stream.mochi_stream.name
 }
+
+data "aws_caller_identity" "current" { }
 
 
