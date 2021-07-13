@@ -7,7 +7,7 @@ variable "infra_env" {
 
 variable "mysql_instance_class" {
   type        = string
-  description = "mysql_instance_class environment"
+  description = "instance class for mysql cluster"
 
 }
 

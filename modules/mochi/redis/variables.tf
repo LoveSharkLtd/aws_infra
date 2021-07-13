@@ -6,20 +6,20 @@ variable "infra_env" {
 
 variable "redis_node_type" {
   type        = string
-  description = "redis_node_type environment"
+  description = "redis_node_type for redis instance"
 
 }
 
 
 variable "redis_nodes" {
   type        = number
-  description = "number of nodes"
+  description = "redis_nodes number of redis nodes required for redis instance"
 
 }
 
 variable "vpc_security_group_ids" {
   type        = list(string)
-  description = "vpc_security_group_ids environment"
+  description = "vpc_security_group_ids"
 
 }
 variable "azs" {

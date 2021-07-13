@@ -7,13 +7,13 @@ variable "infra_env" {
 
 variable "mysql_instance_class" {
   type        = string
-  description = "mysql_instance_class environment"
+  description = "instance class for mysql cluster"
 
 }
 
 variable "vpc_security_group_ids" {
   type        = list(string)
-  description = "vpc_security_group_ids environment"
+  description = "vpc_security_group_ids"
 
 }
 variable "azs" {
