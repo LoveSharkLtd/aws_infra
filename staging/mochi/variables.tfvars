@@ -1,0 +1,8 @@
+infra_env                = "staging"
+mysql_instance_class     = "db.t2.medium"
+stream_name              = "loveshark-staging"
+kinesis_shard_count      = "1"
+redis_node_type          = "cache.t2.medium"
+redis_nodes              = "2"
+sns_platform_application = "mochi-integration-testing-application"
+sms_monthly_dollar_limit = "200"
