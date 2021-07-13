@@ -8,7 +8,7 @@ terraform {
 }
 
 module "sns" {
-  source                   = "../../modules/sns"
+  source                   = "../../../modules/mochi/sns"
   sns_platform_application = var.sns_platform_application
 
 }

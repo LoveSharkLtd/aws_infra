@@ -8,7 +8,7 @@ terraform {
 }
 
 module "redis" {
-  source = "../../modules/redis"
+  source = "../../../modules/mochi/redis"
 
   infra_env              = var.infra_env
   azs                    = data.terraform_remote_state.network.outputs.vpc_azs
@@ -23,7 +23,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "terraform-mochi-state"
-    key    = "${var.infra_env}/network/terraform.tfstate"
+    key    = "${var.infra_env}/mochi/network/terraform.tfstate"
     region = "eu-west-1"
   }
 }

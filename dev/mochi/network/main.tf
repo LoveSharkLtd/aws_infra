@@ -8,7 +8,7 @@ terraform {
 }
 
 module "vpc" {
-  source = "../../modules/network"
+  source = "../../../modules/mochi/network"
 
   infra_env      = var.infra_env
   vpc_cidr       = "10.0.0.0/17"

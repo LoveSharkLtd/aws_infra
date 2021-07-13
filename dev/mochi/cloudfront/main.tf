@@ -8,6 +8,6 @@ terraform {
 }
 
 module "cloudfront" {
-  source = "../../modules/cloudfront"
+  source = "../../../modules/mochi/cloudfront"
 
 }
