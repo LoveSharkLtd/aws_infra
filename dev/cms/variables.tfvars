@@ -1,2 +1,2 @@
-infra_env                = "dev"
+infra_env = "dev"
 

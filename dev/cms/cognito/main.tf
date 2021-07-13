@@ -10,7 +10,7 @@ terraform {
 module "cognito" {
   source    = "../../../modules/cms/cognito"
   infra_env = var.infra_env
-  
+
 }
 
 

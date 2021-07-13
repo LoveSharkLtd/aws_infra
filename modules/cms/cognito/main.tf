@@ -2,11 +2,11 @@
 
 resource "aws_cognito_user_pool" "cms-userpool" {
 
-  name                       = "cms-${var.infra_env}"
-  username_attributes        = ["email", "phone_number"]
-  auto_verified_attributes   = ["email"]
-  mfa_configuration          = "OFF"
-  
+  name                     = "cms-${var.infra_env}"
+  username_attributes      = ["email", "phone_number"]
+  auto_verified_attributes = ["email"]
+  mfa_configuration        = "OFF"
+
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
@@ -38,11 +38,11 @@ resource "aws_cognito_user_pool" "cms-userpool" {
   }
 
   schema {
-    attribute_data_type          = "String"
-    developer_only_attribute     = false
-    mutable                      = true
-    name                         = "email"
-    required                     = true
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "email"
+    required                 = true
     string_attribute_constraints {
       max_length = "2048"
       min_length = "0"
@@ -50,11 +50,11 @@ resource "aws_cognito_user_pool" "cms-userpool" {
 
   }
   schema {
-    attribute_data_type          = "String"
-    developer_only_attribute     = false
-    mutable                      = true
-    name                         = "preferred_username"
-    required                     = true
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "preferred_username"
+    required                 = true
     string_attribute_constraints {
       max_length = "2048"
       min_length = "0"
@@ -74,11 +74,11 @@ resource "aws_cognito_user_pool_client" "cms_web_client" {
   access_token_validity         = 60
   id_token_validity             = 60
   token_validity_units {
-    access_token = "minutes"
-    id_token = "minutes"
+    access_token  = "minutes"
+    id_token      = "minutes"
     refresh_token = "days"
   }
-  
+
 }
 
 
