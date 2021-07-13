@@ -7,8 +7,11 @@ terraform {
 
 }
 
-module "cognito-idp" {
-  source    = "../../modules/cognito-idp"
+module "cognito" {
+  source    = "../../../modules/cms/cognito"
   infra_env = var.infra_env
-
+  
 }
+
+
+

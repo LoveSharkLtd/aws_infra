@@ -37,7 +37,7 @@ resource "aws_iam_role" "sns_cognito_role" {
     })
   }
   tags = {
-    ManagedBy   = "teraform"
+    ManagedBy   = "terraform"
     environment = var.infra_env
 
   }
