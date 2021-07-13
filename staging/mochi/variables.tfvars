@@ -1,4 +1,3 @@
-aws_profile              = "ci_staging"
 infra_env                = "staging"
 mysql_instance_class     = "db.t2.medium"
 stream_name              = "loveshark-staging"

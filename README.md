@@ -36,18 +36,19 @@ This step is one-time setup for each environment
 Provisioning Resources once remote state for environment ready.
 -------------------------------
 Each environment lives in seperate aws account.Make sure to export AWS_ACCESS_KEY ,AWS_SECRETE_KEY or AWS_PROFILE for aws account on which you are going to provision resources.
+ We've created module for each application .e.g we have mochi and cms as module in current infrastucture
 
 0.  **Make sure profile has limited permission to build infrastructure.**
      ```
      export AWS_PROFILE=circleci_sandbox
      ```
-1. Initialize terrgrunt in each resource e.g. 'dev/network .
+1. Initialize terrgrunt in each resource of respective application e.g. 'dev/mochi/network .
      ```
-     cd dev/network
+     cd dev/mochi/network
      terragrunt init
       ```
      
-2. Plan resources using terragrunt within resources folder e.g. 'dev/network .
+2. Plan resources using terragrunt within resources folder of respective application  e.g. 'dev/mochi/network .
     ```
     terragrunt plan -var-file ../variables.tfvars
     ```

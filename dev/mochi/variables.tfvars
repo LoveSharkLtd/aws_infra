@@ -1,4 +1,3 @@
-aws_profile              = "circleci_sandbox"
 infra_env                = "dev"
 mysql_instance_class     = "db.t2.small"
 stream_name              = "loveshark-dev"
