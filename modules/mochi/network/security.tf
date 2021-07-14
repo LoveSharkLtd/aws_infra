@@ -12,8 +12,8 @@ resource "aws_security_group" "my_sql_db" {
     Environment = var.infra_env
     ManagedBy   = "terraform"
   }
-
 }
+
 
 resource "aws_security_group_rule" "my_sql_inbound" {
   type              = "ingress"
@@ -33,6 +33,46 @@ resource "aws_security_group_rule" "my_sql_outbound" {
   to_port     = 0
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group" "redshift" {
+  name        = "mochi-${var.infra_env}-redshift_sg"
+  description = "security group for redshift"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    Name        = "mochi-${var.infra_env}-redshift_sg"
+    Environment = var.infra_env
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_security_group_rule" "redshift_vpc_inbound" {
+  type              = "ingress"
+  security_group_id = aws_security_group.redshift.id
+  description       = "VPC General"
+
+  from_port   = 5439
+  to_port     = 5439
+  protocol    = "tcp"
+  cidr_blocks = [module.vpc.vpc_cidr_block]
+}
+
+resource "aws_security_group_rule" "redshift_looker_inbound" {
+  type              = "ingress"
+  security_group_id = aws_security_group.redshift.id
+  description       = "Looker whitelist"
+
+  from_port   = 5439
+  to_port     = 5439
+  protocol    = "tcp"
+  cidr_blocks = [
+    "52.210.85.110/32",
+    "52.30.198.163/32",
+    "34.249.159.112/32",
+    "52.19.248.176/32",
+    "54.220.245.171/32"
+  ]
 }
 
 
@@ -60,14 +100,16 @@ resource "aws_security_group" "public" {
     Environment = var.infra_env
     ManagedBy   = "terraform"
   }
-
 }
 
 
 
 resource "aws_ssm_parameter" "sg_ids" {
   name        = "security_group_ids"
-  description = "sqids to connect to  database"
+  description = "sqids to connect to database"
   type        = "StringList"
-  value       = aws_security_group.my_sql_db.id
+  value       = [
+    aws_security_group.my_sql_db.id,
+    aws_security_group.redshift.id
+  ]
 }
