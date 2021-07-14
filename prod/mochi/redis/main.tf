@@ -22,7 +22,7 @@ module "redis" {
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
-    bucket = "terraform-staging-mochi-state"
+    bucket = "terraform-prod-mochi-state"
     key    = "${var.infra_env}/mochi/network/terraform.tfstate"
     region = "eu-west-1"
   }
