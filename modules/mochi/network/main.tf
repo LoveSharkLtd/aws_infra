@@ -13,18 +13,6 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-
-# module "redshift-sg" {
-#   source = "terraform-aws-modules/security-group/aws//modules/redshift"
-
-#   name        = "mochi-${var.infra_env}-redshift-sg"
-#   description = "Security group for redshift w"
-#   vpc_id      = module.vpc.vpc_id
-
-#   ingress_cidr_blocks = [module.vpc.vpc_cidr_block,"18.130.1.96/27"]
-#   ingress_with_self =[]
-# }
-
 module "vpc-endpoints" {
   source             = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   vpc_id             = module.vpc.vpc_id
