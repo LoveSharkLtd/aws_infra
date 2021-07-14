@@ -11,6 +11,12 @@ variable "mysql_instance_class" {
 
 }
 
+variable "rds_cluster_instance_count" {
+  type        = string
+  description = "number of cluster instance for mysql cluster"
+
+}
+
 variable "vpc_security_group_ids" {
   type        = list(string)
   description = "vpc_security_group_ids"

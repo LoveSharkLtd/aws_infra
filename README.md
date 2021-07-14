@@ -70,7 +70,7 @@ Each environment lives in seperate aws account.Make sure to export AWS_ACCESS_KE
  2. Confidential data encrypted using aws KMS key and only administrator can encrypt the file using aws kms and key-id of alias "mochi_secrets" command below.
     
     ``` 
-    aws kms encrypt --key-id <<key_id>> --region eu-west-1 --plaintext fileb://<<file.yml>  —output text --query CiphertextBlob ><<file.yml>.encrypted 
+    aws kms encrypt --key-id <<key_id>> --region eu-west-1 --plaintext fileb://<<file.yml> --output text --query CiphertextBlob > <<file.yml>>.encrypted 
     ``` 
    Output file of above command <file.yml>.encrypted checked into each environments repository . e.g. dev/db.yml.encrypted
 
