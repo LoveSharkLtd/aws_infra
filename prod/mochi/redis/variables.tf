@@ -6,7 +6,7 @@ variable "infra_env" {
 
 variable "redis_node_type" {
   type        = string
-  description = "rredis_node_type for redis instance"
+  description = "node type for redis instance"
 
 }
 
@@ -15,5 +15,4 @@ variable "redis_nodes" {
   description = "redis_nodes number of redis nodes required for redis instance"
 
 }
-
 
