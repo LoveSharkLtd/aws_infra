@@ -32,7 +32,7 @@ resource "aws_rds_cluster" "my_sql_cluster" {
 }
 
 resource "aws_rds_cluster_instance" "my_sql_cluster_instances" {
-  count                = 1
+  count                = var.rds_cluster_instance_count
   identifier           = "mochi-${var.infra_env}-instance-${count.index}"
   cluster_identifier   = aws_rds_cluster.my_sql_cluster.id
   instance_class       = var.mysql_instance_class
