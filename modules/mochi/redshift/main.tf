@@ -1,9 +1,17 @@
+data "aws_ssm_parameter" "redshift_master_username" {
+  name = "redshift_master_username"
+}
+
+data "aws_ssm_parameter" "redshift_master_password" {
+  name = "redshift_master_password"
+}
+
 resource "aws_redshift_cluster" "mochi_redshift_cluster" {
   cluster_identifier = "mochi_prod"
   database_name      = "mochi_analytics_prod"
 
-  master_username    = local.db_creds.redshift_master_username
-  master_password    = local.db_creds.redshift_master_password
+  master_username    = data.aws_ssm_parameter.redshift_master_username
+  master_password    = data.aws_ssm_parameter.redshift_master_password
 
   node_type          = "dc2.large"
   cluster_type       = "multi-node"
@@ -42,18 +50,4 @@ resource "aws_ssm_parameter" "redshift_db_name" {
   description = "db_name "
   type        = "String"
   value       = mochi_redshift_cluster.mochi_prod.database_name
-}
-
-resource "aws_ssm_parameter" "redshift_username" {
-  name        = "db_username"
-  description = "db_username "
-  type        = "String"
-  value       = mochi_redshift_cluster.mochi_prod.master_username
-}
-
-resource "aws_ssm_parameter" "redshift_password" {
-  name        = "db_password"
-  description = "db_password "
-  type        = "SecureString"
-  value       = mochi_redshift_cluster.mochi_prod.master_password
 }
