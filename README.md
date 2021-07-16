@@ -1,81 +1,113 @@
 
 Mochi Infrastructure (IaC)
-=========
+=========================
 
-This directory contains terraform scripts to create, plan and manage infrastructure required by the Mochi app.
+This directory contains terraform scripts to create, plan and manage 
+infrastructure required by the Mochi app.
 
-If you are interested in learning more about terraform, please check out the [Getting Started guides](https://learn.hashicorp.com/terraform#getting-started) on HashiCorp's learning platform.
+If you are interested in learning more about terraform, please check out the 
+[Getting Started guides](https://learn.hashicorp.com/terraform#getting-started).
 
+Prerequisites
+-------------
+- Terraform
+- Terragrunt
 
 Remote state resource creation
--------------------------------
-This step is one-time setup for each environment
-
-- Create new folder for each environment e.g. dev
+------------------------------
+This step only needs to be done once for each environment.
+   
+- If you're deploying to a new environment, create a new folder for it
 - Navigate to environment folder and initialize terraform. 
-     - Export AWS_ACCESS_KEY, AWS_SECRETE_KEY or AWS_PROFILE.
-
-       ```
-         export AWS_PROFILE=circleci_sandbox
-       ```
-     
-    - **main.tf** of each environment('dev/main.tf') contains only remotes resources s3 bucket and dynamo db for storing state.Initialize terraform
+    - Export AWS_ACCESS_KEY and AWS_SECRET_KEY environment variables, or just
+      export an AWS_PROFILE environment variable, e.g.
       ```
-         terraform init
-       ```
-    - Review resources by executing below command
+    	export AWS_PROFILE=circleci_sandbox
       ```
-         terraform plan
+    
+    - The **main.tf** file in each environment('dev/main.tf') only defines an S3
+	  bucket and a DynamoDB table for storing state. Initialize terraform with
       ```
-    - Create resources by executing below command.Make sure to reveiw resources to be added/changed/destroyed before typing yes.This will create only 2 resources 1. s3 bucket for storing terraform state and dynamodb.
+		terraform init
+      ```
+    - Review the resources that will be created with
+      ```
+        terraform plan
+      ```
+    - Create resources by executing the command below. This should only create 2
+	  resources, the S3 bucket and a DynamoDB instance.
       ``` 
-         terraform apply
+        terraform apply
       ```
      
 
-Provisioning Resources once remote state for environment ready.
+Provisioning the rest of the resources
 -------------------------------
-Each environment lives in seperate aws account.Make sure to export AWS_ACCESS_KEY ,AWS_SECRETE_KEY or AWS_PROFILE for aws account on which you are going to provision resources.
- We've created module for each application .e.g we have mochi and cms as module in current infrastucture
+The dev, staging, and production environments all live in separate AWS accounts.
+Make sure to export the correct AWS credentials for the account in which resources
+will be provisioned.
 
-0.  **Make sure profile has limited permission to build infrastructure.**
-     ```
-     export AWS_PROFILE=circleci_sandbox
-     ```
-1. Initialize terrgrunt in each resource of respective application e.g. 'dev/mochi/network .
-     ```
-     cd dev/mochi/network
-     terragrunt init
-      ```
+Each application also has its own module - we have separate nested modules under
+`modules/mochi` and `modules/cms`.
+
+### Before provisioning
+Some resources require us to manually create some parameters in the SSM parameter
+store with specific names before they are provisioned and deployed. Currently, these are:
+
+1. auth_private_key 
+2. auth_info
+3. sns_platform_app_certificate : contains certificate value from apple distribution certificate file().p12) file
+4. sns_platform_app_private_key : contain private key of dist certificate file
+5. redshift_master_username
+6. redshift_master_password
+
+
+### Planning & provisioning
+
+0.  Make sure you are using the correct AWS credentials, and that the user has
+    the correct set of permissions
+    ```
+    export AWS_PROFILE=circleci_sandbox
+    ```
+1. Initialize `terragrunt` in the directory of the resource you want to provision,
+   e.g. 'dev/mochi/network'
+    ```
+    cd dev/mochi/network
+    terragrunt init
+    ```
      
-2. Plan resources using terragrunt within resources folder of respective application  e.g. 'dev/mochi/network .
+2. Plan the resources to be provisioned using `terragrunt`
     ```
     terragrunt plan -var-file ../variables.tfvars
     ```
 
-4. Make sure to review all resource before applying below command.
-     ``` 
-     terragrunt apply -var-file ../variables.tfvars
-     ```
+4. Review all resources to ensure they are correct before actually provisioning
+    ``` 
+    terragrunt apply -var-file ../variables.tfvars
+    ```
 
+### Encryption of database credentials
 
- #### Below resources are created manually
-
- 
- 1. Some of the ssm key value provided by ios team .e.g. private key of application setup manually.
-    1. auth_private_key 
-    2. auth_info
-    3. sns_platform_app_certificate : contains certificate value from apple distribution certificate file().p12) file
-    4. sns_platform_app_private_key : contain private key of dist certificate file
- 2. Confidential data encrypted using aws KMS key and only administrator can encrypt the file using aws kms and key-id of alias "mochi_secrets" command below.
+Confidential data can be encrypted using AWS KMS. 
+Only users with administrator access can encrypt files using AWS KMS.
     
-    ``` 
-    aws kms encrypt --key-id <<key_id>> --region eu-west-1 --plaintext fileb://<<file.yml> --output text --query CiphertextBlob > <<file.yml>>.encrypted 
-    ``` 
-   Output file of above command <file.yml>.encrypted checked into each environments repository . e.g. dev/db.yml.encrypted
+``` 
+aws kms encrypt --key-id <key_id> \
+                --region <region> \
+				--plaintext fileb://<file.yml> \
+				--output text \
+				--query CiphertextBlob > <file.yml.encrypted> 
+``` 
 
-   You can use below command to decrypt it.Copy the content of .encryped filed and put at <<encrypted_text>>
+The encrypted output file of the command above should be checked into the corresponding 
+environment database resource directory e.g. dev/mochi/database/db.yml.encrypted
 
-   ``` 
-    aws kms decrypt --ciphertext-blob fileb://<(echo "<<encrypted_text>>" | base64 -D) --output text --query Plaintext --region <<region> | base64 -D > <<file_descrypted.yml>>
-   ```
+Decrypt files with the command below, replacing <encrypted_text> with the text
+of the encrypted file.
+
+``` 
+aws kms decrypt --ciphertext-blob fileb://<(echo "<encrypted_text>" | base64 -D) \
+ 				--output text \
+				--query Plaintext \
+				--region <<region> | base64 -D > <decrypted_file.yml>
+```
