@@ -108,8 +108,6 @@ resource "aws_ssm_parameter" "sg_ids" {
   name        = "security_group_ids"
   description = "sqids to connect to database"
   type        = "StringList"
-  value       = [
-    aws_security_group.my_sql_db.id,
-    aws_security_group.redshift.id
-  ]
+  value       = "${aws_security_group.my_sql_db.id},${aws_security_group.redshift.id}"
+
 }
