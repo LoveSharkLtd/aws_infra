@@ -7,3 +7,6 @@ redis_node_type            = "cache.t2.medium"
 redis_nodes                = "2"
 sns_platform_application   = "mochi-prod-application"
 sms_monthly_dollar_limit   = "2000"
+redshift_node_type         = "dc2.large"
+redshift_cluster_type      = "multi-node" 
+redshift_number_of_nodes   = 8

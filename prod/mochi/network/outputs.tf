@@ -27,3 +27,7 @@ output "security_group_public" {
   value = module.vpc.security_group_public
 
 }
+
+output "security_group_redshift" {
+  value = aws_security_group.redshift.id
+}

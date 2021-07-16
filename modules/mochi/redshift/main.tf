@@ -7,15 +7,15 @@ data "aws_ssm_parameter" "redshift_master_password" {
 }
 
 resource "aws_redshift_cluster" "mochi_redshift_cluster" {
-  cluster_identifier = "mochi_prod"
+  cluster_identifier = "mochi-prod"
   database_name      = "mochi_analytics_prod"
 
   master_username    = data.aws_ssm_parameter.redshift_master_username
   master_password    = data.aws_ssm_parameter.redshift_master_password
 
-  node_type          = "dc2.large"
-  cluster_type       = "multi-node"
-  number_of_nodes    = 8
+  node_type          = var.redshift_node_type
+  cluster_type       = var.redshift_cluster_type
+  number_of_nodes    = var.redshift_number_of_nodes
 
   vpc_security_group_ids = var.vpc_security_group_ids
 
@@ -35,19 +35,19 @@ resource "aws_ssm_parameter" "redshift_host" {
   name        = "db_host"
   description = "db_host "
   type        = "String"
-  value       = mochi_redshift_cluster.mochi_prod.endpoint
+  value       = aws_redshift_cluster.mochi_redshift_cluster.endpoint
 }
 
 resource "aws_ssm_parameter" "redshift_port" {
   name        = "db_password"
   description = "db_password "
   type        = "SecureString"
-  value       = mochi_redshift_cluster.mochi_prod.port
+  value       = aws_redshift_cluster.mochi_redshift_cluster.port
 }
 
 resource "aws_ssm_parameter" "redshift_db_name" {
   name        = "db_name"
   description = "db_name "
   type        = "String"
-  value       = mochi_redshift_cluster.mochi_prod.database_name
+  value       = aws_redshift_cluster.mochi_redshift_cluster.database_name
 }
