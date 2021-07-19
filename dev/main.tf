@@ -11,14 +11,6 @@ terraform {
     encrypt        = true
 
   }
-  # backend "s3" {
-  #   bucket = "terraform-mochi-state"
-  #   key = "dev/terraform.tfstate"
-  #   profile = "circleci_sandbox"
-  #   region = "eu-west-1"
-  #   encrypt = "true"
-  #   # ...
-  # }
 }
 
 resource "aws_s3_bucket" "terraform_state" {

@@ -12,8 +12,8 @@ resource "aws_security_group" "my_sql_db" {
     Environment = var.infra_env
     ManagedBy   = "terraform"
   }
-
 }
+
 
 resource "aws_security_group_rule" "my_sql_inbound" {
   type              = "ingress"
@@ -34,6 +34,7 @@ resource "aws_security_group_rule" "my_sql_outbound" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 }
+
 
 
 resource "aws_security_group" "public" {
@@ -60,14 +61,13 @@ resource "aws_security_group" "public" {
     Environment = var.infra_env
     ManagedBy   = "terraform"
   }
-
 }
 
 
 
 resource "aws_ssm_parameter" "sg_ids" {
   name        = "security_group_ids"
-  description = "sqids to connect to  database"
+  description = "sqids to connect to database"
   type        = "StringList"
   value       = aws_security_group.my_sql_db.id
 }
