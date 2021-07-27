@@ -3,8 +3,3 @@ variable "infra_env" {
   description = "infrastructure environment"
 
 }
-
-
-
-
-
