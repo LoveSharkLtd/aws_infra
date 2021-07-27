@@ -45,9 +45,9 @@ resource "aws_security_group_rule" "redshift_looker_inbound" {
   security_group_id = aws_security_group.redshift.id
   description       = "Looker whitelist"
 
-  from_port   = 5439
-  to_port     = 5439
-  protocol    = "tcp"
+  from_port = 5439
+  to_port   = 5439
+  protocol  = "tcp"
   cidr_blocks = [
     "52.210.85.110/32",
     "52.30.198.163/32",
