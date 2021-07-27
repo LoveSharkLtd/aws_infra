@@ -10,12 +10,12 @@ resource "aws_redshift_cluster" "mochi_redshift_cluster" {
   cluster_identifier = "mochi-prod"
   database_name      = "mochi_analytics_prod"
 
-  master_username    = data.aws_ssm_parameter.redshift_master_username
-  master_password    = data.aws_ssm_parameter.redshift_master_password
+  master_username = data.aws_ssm_parameter.redshift_master_username
+  master_password = data.aws_ssm_parameter.redshift_master_password
 
-  node_type          = var.redshift_node_type
-  cluster_type       = var.redshift_cluster_type
-  number_of_nodes    = var.redshift_number_of_nodes
+  node_type       = var.redshift_node_type
+  cluster_type    = var.redshift_cluster_type
+  number_of_nodes = var.redshift_number_of_nodes
 
   vpc_security_group_ids = var.vpc_security_group_ids
 
@@ -24,7 +24,7 @@ resource "aws_redshift_cluster" "mochi_redshift_cluster" {
     ManagedBy   = "terraform"
     Environment = var.infra_env
   }
-  
+
   lifecycle {
     prevent_destroy = true
   }

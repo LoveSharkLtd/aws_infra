@@ -1,3 +1,6 @@
+# in production we've decided to use existing production s3 bucket from eu-west-2 
+# and redirect all resources to point to old s3 bucket. hence we 've not used s3 module.
+# 
 provider "aws" {
   region = "eu-west-1"
 
@@ -12,27 +15,6 @@ terraform {
   backend "s3" {}
 }
 
-resource "aws_s3_bucket" "test_bucket" {
-  bucket        = "delete-movearchive"
-  provider      = aws.eu-west-2
-  acl           = "private"
-  force_destroy = false
-
-
-
-  lifecycle {
-
-    prevent_destroy = true
-  }
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET", "PUT", "POST"]
-    allowed_origins = ["*"]
-    expose_headers  = []
-    max_age_seconds = 3000
-  }
-}
 
 resource "aws_s3_bucket" "mochi_bucket" {
   bucket        = "loveshark-prod"

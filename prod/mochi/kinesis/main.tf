@@ -13,7 +13,7 @@ module "kinesis" {
   stream_name          = var.stream_name
   telemetry_bucket_arn = data.terraform_remote_state.s3.outputs.mochi_telemetry_bucket_arn
   kinesis_shard_count  = var.kinesis_shard_count
-  
+
 }
 
 
