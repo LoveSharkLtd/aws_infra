@@ -7,6 +7,15 @@ resource "aws_sns_platform_application" "mochi_sns_platform_application" {
 
 }
 
+resource "aws_sns_topic" "all_users" {
+  name = "all-users"
+}
+
+resource "aws_ssm_parameter" "all_users_topic" {
+  name = "all_users_topic"
+  type = "String"
+  value = aws_sns_topic.all_users.arn
+}
 
 resource "aws_ssm_parameter" "sns_platform_app_arn" {
   name        = "sns_platform_app_arn"
