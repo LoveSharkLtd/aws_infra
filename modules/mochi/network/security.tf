@@ -44,7 +44,7 @@ resource "aws_security_group" "public" {
 
   ingress {
     cidr_blocks = [module.vpc.vpc_cidr_block]
-    description = "all traffic "
+    description = "all traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -67,7 +67,7 @@ resource "aws_security_group" "public" {
 
 resource "aws_ssm_parameter" "sg_ids" {
   name        = "security_group_ids"
-  description = "sqids to connect to database"
+  description = "Security groups needed for database and AWS service access"
   type        = "StringList"
-  value       = aws_security_group.my_sql_db.id
+  value       = "${aws_security_group.my_sql_db.id},${aws_security_group.public.id}"
 }
