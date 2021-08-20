@@ -19,11 +19,16 @@ module "vpc-endpoints" {
   security_group_ids = [aws_security_group.public.id]
   endpoints = {
     ssm = {
-      service            = "ssm"
-      security_group_ids = [aws_security_group.public.id]
-      subnet_ids         = module.vpc.public_subnets
-      tags               = { Name = "ssm-vpc-endpoint" }
-
+      service             = "ssm"
+      subnet_ids          = module.vpc.public_subnets
+      tags                = { Name = "ssm-vpc-endpoint" }
+      private_dns_enabled = true
+    },
+    sns = {
+      service             = "sns"
+      subnet_ids          = module.vpc.public_subnets
+      tags                = { Name = "sns-vpc-endpoint" }
+      private_dns_enabled = true
     },
     s3 = {
       service    = "s3"
