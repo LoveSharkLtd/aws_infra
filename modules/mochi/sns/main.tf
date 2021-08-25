@@ -1,10 +1,12 @@
 resource "aws_sns_platform_application" "mochi_sns_platform_application" {
 
-  name                = var.sns_platform_application
-  platform            = "APNS"
-  platform_credential = data.aws_ssm_parameter.sns_platform_app_private_key.value
-  platform_principal  = data.aws_ssm_parameter.sns_platform_app_certificate.value
-
+  name                         = var.sns_platform_application
+  platform                     = "APNS"
+  platform_credential          = data.aws_ssm_parameter.sns_platform_app_private_key.value
+  platform_principal           = data.aws_ssm_parameter.sns_platform_app_certificate.value
+  success_feedback_role_arn    = data.aws_ssm_parameter.push_notification_delivery_report_role.value
+  failure_feedback_role_arn    = data.aws_ssm_parameter.push_notification_delivery_report_role.value
+  success_feedback_sample_rate = 100
 }
 
 resource "aws_sns_topic" "all_users" {
@@ -35,3 +37,7 @@ data "aws_ssm_parameter" "sns_platform_app_private_key" {
   with_decryption = true
 }
 
+data "aws_ssm_parameter" "push_notification_delivery_report_role" {
+  name            = "push_notification_delivery_report_role"
+  with_decryption = true
+}
