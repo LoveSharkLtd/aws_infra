@@ -58,4 +58,3 @@ resource "aws_ssm_parameter" "media_convert_role" {
   type        = "String"
   value       = aws_iam_role.media_convert_role.arn
 }
-
