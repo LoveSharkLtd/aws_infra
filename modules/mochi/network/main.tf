@@ -18,6 +18,12 @@ module "vpc-endpoints" {
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [aws_security_group.public.id]
   endpoints = {
+    kinesis = {
+      service             = "kinesis-streams"
+      subnet_ids          = module.vpc.public_subnets
+      tags                = { Name = "kinesis-vpc-endpoint" }
+      private_dns_enabled = true
+    },
     ssm = {
       service             = "ssm"
       subnet_ids          = module.vpc.public_subnets
