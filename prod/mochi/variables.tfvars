@@ -1,5 +1,5 @@
 infra_env                  = "prod"
-mysql_instance_class       = "db.r5.xlarge"
+mysql_instance_class       = "db.r5.large"
 rds_cluster_instance_count = "2"
 stream_name                = "loveshark-prod"
 kinesis_shard_count        = "1"
