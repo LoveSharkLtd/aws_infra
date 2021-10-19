@@ -24,7 +24,7 @@ variable "vpc_security_group_ids" {
 }
 variable "azs" {
   type        = list(string)
-  description = "Azs "
+  description = "Availability zones"
 
 }
 
