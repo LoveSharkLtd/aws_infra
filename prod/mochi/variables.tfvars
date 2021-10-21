@@ -10,3 +10,5 @@ sms_monthly_dollar_limit   = "2000"
 redshift_node_type         = "dc2.large"
 redshift_cluster_type      = "multi-node"
 redshift_number_of_nodes   = 8
+opensearch_instance_type   = "t3.medium.elasticsearch"
+opensearch_domain_name     = "production"
