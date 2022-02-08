@@ -3,14 +3,14 @@ resource "aws_iam_role" "push_notification_delivery_report_role" {
 
   assume_role_policy = jsonencode(
     {
-      "Version": "2012-10-17",
-      "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "sns.amazonaws.com"
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "sns.amazonaws.com"
           },
-          "Action": "sts:AssumeRole"
+          "Action" : "sts:AssumeRole"
         }
       ]
     }
@@ -19,18 +19,18 @@ resource "aws_iam_role" "push_notification_delivery_report_role" {
     name = "push_notification_delivery_inline_policy"
     policy = jsonencode(
       {
-        "Version": "2012-10-17",
-        "Statement": [
+        "Version" : "2012-10-17",
+        "Statement" : [
           {
-            "Effect": "Allow",
-            "Action": [
+            "Effect" : "Allow",
+            "Action" : [
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents",
               "logs:PutMetricFilter",
               "logs:PutRetentionPolicy"
             ],
-            "Resource": [
+            "Resource" : [
               "*"
             ]
           }
@@ -52,7 +52,7 @@ resource "aws_sns_platform_application" "mochi_sns_platform_application" {
   platform_principal           = data.aws_ssm_parameter.sns_platform_app_certificate.value
   success_feedback_role_arn    = aws_iam_role.push_notification_delivery_report_role.arn
   failure_feedback_role_arn    = aws_iam_role.push_notification_delivery_report_role.arn
-  success_feedback_sample_rate = 100
+  success_feedback_sample_rate = 0
 }
 
 resource "aws_sns_topic" "all_users" {
@@ -60,8 +60,8 @@ resource "aws_sns_topic" "all_users" {
 }
 
 resource "aws_ssm_parameter" "all_users_topic" {
-  name = "all_users_topic"
-  type = "String"
+  name  = "all_users_topic"
+  type  = "String"
   value = aws_sns_topic.all_users.arn
 }
 
